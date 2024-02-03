@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class = "article-entry">
+    <h2> {{object.title}} </h2>
+    <p> by {{object.author}} | {{object.date}}</p>
+    <div>
+        {% if article.image %}
+            <img src="/media/{{article.image}}"alt="{{ article.title }}" style="width:500px;height:200px;">
+        {% endif %}
+     </div> 
+    <p> {{object.body}} </p>
+    <hr>
+    <p><b>Update Requested:- </b>{{object.change_requested}}</p>
+</div>
+
+{% if user.is_authenticated and user == article.author %}
+<p><a href="{% url 'article_edit' article.pk %}">Edit</a> | 
+   <a href="{% url 'article_delete' article.pk %}">Delete</a>
+</p>
+{% endif %}
+
+<p> Back to <a href = "{% url 'article_list' %}"> All Articles </a></p>
+
+{% endblock content %}

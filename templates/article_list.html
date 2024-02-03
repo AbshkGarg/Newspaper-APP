@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Articles {% endblock title %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'home.css' %}">
+ {% for article in object_list %}
+   <div class ="card">
+     <div>
+        <a href ="{% url 'article_detail' article.pk %}"> {{ article.title }} </a>
+
+        <!-- <span class ="font-weight-bold">{{ article.title }}</span> -->
+        &middot;
+        <span class ="text-muted"> by {{ article.author }} |
+            {{ article.date }} | {{article.status}}</span>
+            {% if user.is_authenticated and user.is_superuser %}
+              <span style="float: right;"><a href="{% url 'article_status' article.pk %}">Update Requested</a> </span>
+            {% endif %} 
+      <div></div>
+        {% if article.image %}
+            <img src="/media/{{article.image}}"alt="{{ article.title }}" style="width:500px;height:200px;">
+        {% endif %}
+     </div> 
+     <div class="card-body">
+      <b>{{ article.body }}</b>
+    </div>
+  
+    {% if user.is_authenticated and user == article.author %}
+    <div class="card-footer text-center text-muted">
+       <a href="{% url 'article_edit' article.pk %}">Edit</a> | 
+       <a href="{% url 'article_delete' article.pk %}">Delete</a> 
+     </div>
+   {% endif %}
+
+  
+     </div>
+   <br />
+   {% endfor %}
+   {% endblock content %}
